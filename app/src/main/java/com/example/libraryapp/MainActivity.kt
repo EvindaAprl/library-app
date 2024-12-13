@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_mai)
+        setContentView(R.layout.activity_main)
 
         val btnLogin: Button = findViewById(R.id.btnLogin)
         btnLogin.setOnClickListener {
