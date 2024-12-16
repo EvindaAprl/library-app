@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.google.gms.google.services)
     //id("com.google.gms.google-services")
 }
 
@@ -46,6 +47,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.2.0")
     implementation("com.google.firebase:firebase-database-ktx:21.0.0")
     implementation(libs.androidx.activity)
+    implementation(libs.firebase.auth.ktx)
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
@@ -53,4 +55,5 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation ("androidx.appcompat:appcompat:1.6.1")
     implementation ("com.google.android.material:material:1.9.0")
+    implementation ("com.google.firebase:firebase-auth:23.3.0")
 }

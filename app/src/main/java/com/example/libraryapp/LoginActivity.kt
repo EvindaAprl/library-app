@@ -1,7 +1,14 @@
 package com.example.libraryapp
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -12,6 +19,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.libraryapp.databinding.ActivityLoginBinding
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
     // Deklarasi variabel untuk komponen UI
@@ -23,6 +31,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var ivGmail: ImageButton
     private lateinit var ivFacebook: ImageButton
     private lateinit var tvSignUp: TextView
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,9 +61,7 @@ class LoginActivity : AppCompatActivity() {
             Toast.makeText(this, "Login dengan Facebook", Toast.LENGTH_SHORT).show()
         }
 
-        tvSignUp.setOnClickListener {
-            Toast.makeText(this, "Navigasi ke Halaman Sign Up", Toast.LENGTH_SHORT).show()
-        }
+        setupSignUpTextView()
     }
 
     private fun initViews() {
@@ -66,6 +73,34 @@ class LoginActivity : AppCompatActivity() {
         ivGmail = findViewById(R.id.ivGmail)
         ivFacebook = findViewById(R.id.ivFacebook)
         tvSignUp = findViewById(R.id.tvSignUp)
+    }
+
+    private fun setupSignUpTextView() {
+        val text = "Belum punya akun? Sign up!"
+        val spannableString = SpannableString(text)
+
+        // Indeks teks "Sign up!"
+        val startIndex = text.indexOf("Sign up!")
+        val endIndex = startIndex + "Sign up!".length
+
+        // Membuat bagian "Sign up!" dapat diklik
+        val clickableSpan = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                // Navigasi ke halaman Sign Up
+//                Toast.makeText(this@LoginActivity, "Navigasi ke Halaman Sign Up", Toast.LENGTH_SHORT).show()
+
+                // Gunakan intent untuk membuka halaman SignUpActivity jika ada
+                 val intent = Intent(this@LoginActivity, SignUpActivity::class.java)
+                 startActivity(intent)
+            }
+        }
+
+        // Tambahkan warna hijau pada "Sign up!"
+        spannableString.setSpan(ForegroundColorSpan(Color.GREEN), startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        tvSignUp.text = spannableString
+        tvSignUp.movementMethod = LinkMovementMethod.getInstance() // Mengaktifkan klik pada teks
     }
 
     private fun handleLogin() {
@@ -84,10 +119,20 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        if (email == "test@gmail.com" && password == "12345") {
-            Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this, "Email atau Password salah", Toast.LENGTH_SHORT).show()
-        }
+        // Firebase Authentication untuk login
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    // Jika login berhasil, pindah ke activity berikutnya
+                    Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                    startActivity(intent)
+                    finish() // Menutup LoginActivity agar pengguna tidak bisa kembali
+                } else {
+                    // Jika gagal login
+                    Toast.makeText(this, "Email atau Password salah", Toast.LENGTH_SHORT).show()
+                }
+            }
     }
+
 }
