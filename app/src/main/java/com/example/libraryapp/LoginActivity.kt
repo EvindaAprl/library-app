@@ -8,6 +8,7 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
@@ -33,9 +34,13 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var tvSignUp: TextView
     private lateinit var auth: FirebaseAuth
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        auth = FirebaseAuth.getInstance()
+
 
         // Inisialisasi komponen UI
         initViews()
@@ -120,19 +125,17 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // Firebase Authentication untuk login
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Jika login berhasil, pindah ke activity berikutnya
-                    Toast.makeText(this, "Login Berhasil", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-                    startActivity(intent)
-                    finish() // Menutup LoginActivity agar pengguna tidak bisa kembali
-                } else {
-                    // Jika gagal login
-                    Toast.makeText(this, "Email atau Password salah", Toast.LENGTH_SHORT).show()
-                }
+        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(this, "Successfully Logged In", Toast.LENGTH_SHORT).show()
+            } else {
+                val errorMessage = task.exception?.message ?: "Unknown error"
+                Toast.makeText(this, "Log In failed: $errorMessage", Toast.LENGTH_SHORT).show()
+                Log.e("LoginActivity", "Login failed: $errorMessage")
             }
+        }
+
     }
+
 
 }

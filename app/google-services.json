@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:138541810398:android:aff2bf4eeaed9b1265384f",
+        "mobilesdk_app_id": "1:138541810398:android:262256fda3b256e065384f",
         "android_client_info": {
-          "package_name": "com.example.mypmob1"
+          "package_name": "com.example.libraryapp"
         }
       },
       "oauth_client": [],
