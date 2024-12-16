@@ -1,5 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Theme.LibraryApp" parent="android:Theme.Material.Light.NoActionBar" />
+    <!-- Tema utama aplikasi -->
+    <style name="Theme.LibraryApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!-- Warna border ketika tidak fokus -->
+        <item name="boxStrokeColor">@color/black</item>
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="android:textColorHint">@color/black</item>
+        <item name="hintTextColor">@color/black</item>
+    </style>
+
+    <!-- Style untuk TextInputLayout ketika diklik (fokus) -->
+    <style name="CustomTextInputLayout_Focused" parent="CustomTextInputLayout">
+        <item name="boxStrokeColor">@color/green</item>
+        <item name="hintTextColor">@color/green</item>
+    </style>
+
 </resources>
