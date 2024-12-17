@@ -127,15 +127,29 @@ class LoginActivity : AppCompatActivity() {
         // Firebase Authentication untuk login
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
-                Toast.makeText(this, "Successfully Logged In", Toast.LENGTH_SHORT).show()
+                val user = auth.currentUser
+                if (user != null && user.isEmailVerified) {
+                    Toast.makeText(this, "Successfully Logged In", Toast.LENGTH_SHORT).show()
+                    // Navigasi ke halaman utama
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                } else {
+                    // Jika email belum diverifikasi
+                    auth.signOut() // Logout pengguna
+                    Toast.makeText(
+                        this,
+                        "Email belum diverifikasi. Silakan periksa email Anda untuk verifikasi.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             } else {
                 val errorMessage = task.exception?.message ?: "Unknown error"
                 Toast.makeText(this, "Log In failed: $errorMessage", Toast.LENGTH_SHORT).show()
                 Log.e("LoginActivity", "Login failed: $errorMessage")
             }
         }
-
     }
+
 
 
 }

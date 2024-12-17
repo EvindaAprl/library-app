@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -31,10 +32,14 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var ivGmail: ImageButton
     private lateinit var ivFacebook: ImageButton
     private lateinit var tvLogin: TextView
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_up) // Sesuaikan dengan nama layout XML Anda
+        setContentView(R.layout.activity_sign_up)
+
+        // Inisialisasi Firebase Auth
+        auth = FirebaseAuth.getInstance()
 
         // Inisialisasi elemen UI
         backButton = findViewById(R.id.ivBack)
@@ -47,43 +52,61 @@ class SignUpActivity : AppCompatActivity() {
         ivFacebook = findViewById(R.id.ivFacebook)
         tvLogin = findViewById(R.id.tvLogin)
 
-        // Event Listener untuk Back Button
         backButton.setOnClickListener {
-            onBackPressed() // Kembali ke aktivitas sebelumnya
+            onBackPressed()
         }
 
-        // Event Listener untuk tombol Sign Up
         btnSignUp.setOnClickListener {
-            val nama = etNama.text.toString().trim()
             val email = etEmail.text.toString().trim()
             val password = etPassword.text.toString()
             val ulangiPassword = etUlangiPassword.text.toString()
 
-            if (nama.isEmpty() || email.isEmpty() || password.isEmpty() || ulangiPassword.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty() || ulangiPassword.isEmpty()) {
                 Toast.makeText(this, "Harap isi semua kolom!", Toast.LENGTH_SHORT).show()
             } else if (password != ulangiPassword) {
                 Toast.makeText(this, "Password tidak cocok!", Toast.LENGTH_SHORT).show()
             } else {
-                // Proses Sign Up (contoh)
-                Toast.makeText(this, "Pendaftaran berhasil!\nNama: $nama\nEmail: $email", Toast.LENGTH_LONG).show()
+                signUpWithEmail(email, password)
             }
         }
 
-        // Event Listener untuk tombol Gmail Login
-        ivGmail.setOnClickListener {
-            Toast.makeText(this, "Login dengan Gmail", Toast.LENGTH_SHORT).show()
-            // Tambahkan integrasi Google Sign-In di sini
-        }
-
-        // Event Listener untuk tombol Facebook Login
-        ivFacebook.setOnClickListener {
-            Toast.makeText(this, "Login dengan Facebook", Toast.LENGTH_SHORT).show()
-            // Tambahkan integrasi Facebook Login di sini
-        }
-
-        // Event Listener untuk Login TextView
         setupLoginTextView()
     }
+
+    private fun signUpWithEmail(email: String, password: String) {
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    user?.sendEmailVerification()?.addOnCompleteListener { verificationTask ->
+                        if (verificationTask.isSuccessful) {
+                            Toast.makeText(
+                                this,
+                                "Pendaftaran berhasil! Silakan cek email untuk verifikasi.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            // Navigasi ke halaman Login setelah pendaftaran
+                            startActivity(Intent(this, LoginActivity::class.java))
+                            finish()
+                        } else {
+                            Toast.makeText(
+                                this,
+                                "Gagal mengirim email verifikasi: ${verificationTask.exception?.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Pendaftaran gagal: ${task.exception?.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+    }
+
+
     private fun setupLoginTextView() {
         val text = "Sudah punya akun? Login!"
         val spannableString = SpannableString(text)
