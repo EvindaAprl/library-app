@@ -14,13 +14,15 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.libraryapp.databinding.ActivityLoginBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 
 class LoginActivity : AppCompatActivity() {
     // Deklarasi variabel untuk komponen UI
@@ -33,6 +35,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var ivFacebook: ImageButton
     private lateinit var tvSignUp: TextView
     private lateinit var auth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
 
 
 
@@ -40,6 +43,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         auth = FirebaseAuth.getInstance()
+        setupGoogleSignIn()
 
 
         // Inisialisasi komponen UI
@@ -59,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         ivGmail.setOnClickListener {
-            Toast.makeText(this, "Login dengan Gmail", Toast.LENGTH_SHORT).show()
+            signInWithGoogle()
         }
 
         ivFacebook.setOnClickListener {
@@ -148,6 +152,48 @@ class LoginActivity : AppCompatActivity() {
                 Log.e("LoginActivity", "Login failed: $errorMessage")
             }
         }
+    }
+    private fun setupGoogleSignIn() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id)) // ID dari Firebase Console
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+    }
+
+    private val googleSignInLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            try {
+                val account = task.getResult(ApiException::class.java)
+                firebaseAuthWithGoogle(account.idToken!!)
+            } catch (e: ApiException) {
+                Log.e("LoginActivity", "Google Sign-In failed", e)
+                Toast.makeText(this, "Google Sign-In failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    private fun signInWithGoogle() {
+        val signInIntent = googleSignInClient.signInIntent
+        googleSignInLauncher.launch(signInIntent)
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    Toast.makeText(this, "Welcome ${user?.displayName}", Toast.LENGTH_SHORT).show()
+                    // Navigasi ke halaman utama
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                } else {
+                    Log.e("LoginActivity", "Authentication failed: ${task.exception?.message}")
+                    Toast.makeText(this, "Authentication Failed", Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 
 
