@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LibraryApp</string>
+    <string name="app_name">Perpustakaan Digital</string>
     <string name="default_web_client_id">138541810398-ph5a6f90lushkkbtk57dg33cc2etks9f.apps.googleusercontent.com</string>
     <string name="facebook_app_id">558352346963562</string>
     <string name="fb_login_protocol_scheme">fb558352346963562</string>

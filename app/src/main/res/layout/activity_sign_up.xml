@@ -35,7 +35,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivBack" />
 
-    <!-- Nama Input -->
+    <!-- Input name -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayoutNama"
         style="@style/CustomTextInputLayout"
@@ -131,9 +131,9 @@
         android:layout_marginTop="24dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:backgroundTint="#4CAF50"
+        android:backgroundTint="@color/green"
         android:text="Sign up"
-        android:textColor="@android:color/white"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayoutUlangiPassword" />
