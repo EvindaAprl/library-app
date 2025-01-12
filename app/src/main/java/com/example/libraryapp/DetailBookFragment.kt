@@ -31,10 +31,8 @@ class DetailBookFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Retrieve bookId from arguments
         bookId = arguments?.getInt("BOOK_ID")
 
-        // Initialize UI elements
         setupListeners()
         loadBookDetails()
 
@@ -42,22 +40,18 @@ class DetailBookFragment : Fragment() {
 
 
     private fun setupListeners() {
-        // Back button
         binding.btnBack.setOnClickListener {
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
 
-        // Bookmark button
         binding.btnBookmark.setOnClickListener {
             Toast.makeText(requireContext(), getString(R.string.bookmarked), Toast.LENGTH_SHORT).show()
         }
 
-        // Favorite button
         binding.btnFavorite.setOnClickListener {
             Toast.makeText(requireContext(), getString(R.string.added_to_favorites), Toast.LENGTH_SHORT).show()
         }
 
-        // Action button (e.g., queue the book)
         binding.btnAction.setOnClickListener {
             Toast.makeText(requireContext(), getString(R.string.added_to_queue), Toast.LENGTH_SHORT).show()
         }
@@ -65,7 +59,6 @@ class DetailBookFragment : Fragment() {
 
     private fun loadBookDetails() {
         bookId?.let {
-            // Retrieve book details from database using bookId
             val bookFromDb = getBookFromDatabase(it)
             this.book = bookFromDb
 
@@ -76,7 +69,6 @@ class DetailBookFragment : Fragment() {
             binding.tvSynopsis.text = book.synopsis
 
 
-            // Load book cover
             try {
                 val coverFile = File(book.coverPath)
                 if (coverFile.exists()) {
@@ -97,14 +89,11 @@ class DetailBookFragment : Fragment() {
             }
 
         }  ?: run {
-            // Handle case where book id is null
             Toast.makeText(requireContext(), getString(R.string.book_not_found_null), Toast.LENGTH_SHORT).show()
-            // You can also clear view and handle the logic when bookId is null
         }
     }
 
     private fun getBookFromDatabase(bookId: Int): Book {
-        // Simulate a database query
         // Replace this with actual Room database query or other local database logic
         return Book(
             id = bookId,
