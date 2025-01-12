@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_homepage"
+        android:title="Beranda" />
+    <item
+        android:id="@+id/nav_collection"
+        android:icon="@drawable/ic_collection"
+        android:title="Koleksi" />
+    <item
+        android:id="@+id/nav_social"
+        android:icon="@drawable/ic_social"
+        android:title="Sosial" />
+    <item
+        android:id="@+id/nav_account"
+        android:icon="@drawable/ic_account"
+        android:title="Akun" />
+</menu>

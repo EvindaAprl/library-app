@@ -13,10 +13,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 
@@ -118,10 +115,6 @@ class SignUpActivity : AppCompatActivity() {
         // Membuat bagian "Sign up!" dapat diklik
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                // Navigasi ke halaman Sign Up
-//                Toast.makeText(this@LoginActivity, "Navigasi ke Halaman Sign Up", Toast.LENGTH_SHORT).show()
-
-                // Gunakan intent untuk membuka halaman SignUpActivity jika ada
                 val intent = Intent(this@SignUpActivity, LoginActivity::class.java)
                 startActivity(intent)
             }

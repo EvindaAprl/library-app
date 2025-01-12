@@ -24,7 +24,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import java.util.Arrays
 
 class LoginActivity : AppCompatActivity() {
 
@@ -35,11 +34,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var btnLogin: Button
     private lateinit var tvForgotPassword: TextView
     private lateinit var tvSignUp: TextView
-    private lateinit var progressBar: ProgressBar
     private lateinit var auth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
-
-    val EMAIL: String = "email"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,18 +106,16 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        progressBar.visibility = View.VISIBLE
         btnLogin.isEnabled = false
 
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
-            progressBar.visibility = View.GONE
             btnLogin.isEnabled = true
 
             if (task.isSuccessful) {
                 val user = auth.currentUser
                 if (user != null && user.isEmailVerified) {
                     Toast.makeText(this, "Successfully Logged In", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, DashboardActivity::class.java))
                     finish()
                 } else {
                     auth.signOut()
@@ -168,7 +162,7 @@ class LoginActivity : AppCompatActivity() {
         auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
                 Toast.makeText(this, "Welcome ${auth.currentUser?.displayName}", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, DashboardActivity::class.java))
                 finish()
             } else {
                 Log.e("LoginActivity", "Authentication failed: ${task.exception?.message}")

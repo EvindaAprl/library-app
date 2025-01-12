@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name">Perpustakaan Digital</string>
     <string name="default_web_client_id">138541810398-ph5a6f90lushkkbtk57dg33cc2etks9f.apps.googleusercontent.com</string>
-    <string name="facebook_app_id">558352346963562</string>
-    <string name="fb_login_protocol_scheme">fb558352346963562</string>
-    <string name="facebook_client_token">6b62729ff75a18013b1b47573d860e33</string>
-
-
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
