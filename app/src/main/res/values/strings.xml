@@ -30,5 +30,27 @@
     <string name="available_count_default">0 tersedia</string>
     <string name="book_synopsis">Sinopsis buku di sini...</string>
 
+    <string name="search_book_hint">Cari buku...</string>
+    <string name="search_user_hint">Cari user...</string>
+    <string name="continue_reading_label">Lanjutkan Membaca</string>
+    <string name="see_all">Selengkapnya</string>
+    <string name="new_books_label">Terbaru</string>
+    <string name="recommendation_label">Rekomendasi</string>
+    <string name="profile_name">Evinda Apriliani</string>
+    <string name="profile_bio">Membaca adalah jendela dunia.</string>
+    <string name="stats_baca">21\nBaca</string>
+    <string name="stats_following">120\nFollowing</string>
+    <string name="stats_followers">300\nFollowers</string>
+    <string name="edit_profile_button">Edit Profile</string>
+    <string name="share_profile_button">Share Profile</string>
+    <string name="post_button">Post</string>
+    <string name="create_collection_button">+ Buat Koleksi</string>
+
+    <string name="search_feature_not_available">Fitur pencarian belum tersedia</string>
+    <string name="create_collection_feature_not_available">Fitur buat koleksi belum tersedia</string>
+    <string name="edit_profile_not_available">Fitur edit profile belum tersedia</string>
+    <string name="share_profile_not_available">Fitur share profile belum tersedia</string>
+    <string name="post_feature_not_available">Fitur post belum tersedia</string>
+
 
 </resources>

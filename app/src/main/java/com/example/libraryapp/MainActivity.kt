@@ -13,16 +13,33 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.loginButton.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
+            navigateToLogin()
         }
 
         binding.signUpButton.setOnClickListener {
-            val intent = Intent(this, SignUpActivity::class.java)
-            startActivity(intent)
-            finish()
+            navigateToSignUp()
         }
+        // Cek jika sudah login sebelumnya (misalnya, menggunakan SharedPreferences)
+        // Jika sudah login, langsung ke Dashboard
+        // if(isUserLoggedIn()) {
+        //      navigateToDashboard()
+        //    }
+    }
+
+
+    private fun navigateToLogin() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+    private fun navigateToSignUp(){
+        val intent = Intent(this, SignUpActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+    private fun navigateToDashboard() {
+        val intent = Intent(this, DashboardActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
-

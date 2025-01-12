@@ -3,10 +3,11 @@ package com.example.libraryapp
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.libraryapp.adapter.BookAdapter
 import com.example.libraryapp.databinding.ActivityDashboardBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class DashboardActivity : AppCompatActivity() {
+class DashboardActivity : AppCompatActivity(), BookAdapter.OnBookClickListener {
     private lateinit var binding: ActivityDashboardBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,8 +17,7 @@ class DashboardActivity : AppCompatActivity() {
         loadFragment(HomepageFragment())
 
         // Handle bottom navigation
-        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigation.setOnItemSelectedListener { item ->
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
             val fragment = when (item.itemId) {
                 R.id.nav_home -> HomepageFragment()
                 R.id.nav_collection -> CollectionFragment()
@@ -34,6 +34,17 @@ class DashboardActivity : AppCompatActivity() {
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
+            .commit()
+    }
+    override fun onBookClick(bookId: Int) {
+        val bundle = Bundle()
+        bundle.putInt("book_id", bookId)
+
+        val detailBookFragment = DetailBookFragment()
+        detailBookFragment.arguments = bundle
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, detailBookFragment)
+            .addToBackStack(null)
             .commit()
     }
 }
