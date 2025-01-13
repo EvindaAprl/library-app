@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.libraryapp.databinding.FragmentDetailBookBinding
 import com.example.libraryapp.model.Book
 import java.io.File
-import java.io.FileNotFoundException
 
 class DetailBookFragment : Fragment() {
 
@@ -19,6 +19,7 @@ class DetailBookFragment : Fragment() {
 
     private var bookId: Int? = null
     private lateinit var book: Book
+    private var isBorrowed: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +54,12 @@ class DetailBookFragment : Fragment() {
         }
 
         binding.btnAction.setOnClickListener {
-            Toast.makeText(requireContext(), getString(R.string.added_to_queue), Toast.LENGTH_SHORT).show()
+            isBorrowed = !isBorrowed
+            updateButtonState()
+
+            val message = if(isBorrowed) getString(R.string.added_to_queue) else getString(R.string.remove_from_queue)
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+
         }
     }
 
@@ -87,12 +93,21 @@ class DetailBookFragment : Fragment() {
                 binding.ivBookCover.setImageResource(R.drawable.ic_book) // set placeholder gambar
                 Toast.makeText(requireContext(), getString(R.string.error_load_image), Toast.LENGTH_SHORT).show() // feedback error
             }
+            updateButtonState()
 
         }  ?: run {
             Toast.makeText(requireContext(), getString(R.string.book_not_found_null), Toast.LENGTH_SHORT).show()
         }
     }
-
+    private fun updateButtonState() {
+        if (isBorrowed) {
+            binding.btnAction.text = getString(R.string.button_pinjam)
+            binding.btnAction.backgroundTintList = ContextCompat.getColorStateList(requireContext(),R.color.orange)
+        } else {
+            binding.btnAction.text = getString(R.string.button_antri)
+            binding.btnAction.backgroundTintList = ContextCompat.getColorStateList(requireContext(),R.color.green)
+        }
+    }
     private fun getBookFromDatabase(bookId: Int): Book {
         // Replace this with actual Room database query or other local database logic
         return Book(
