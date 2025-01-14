@@ -5,11 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.libraryapp.R
 import com.example.libraryapp.databinding.ItemBookBinding
 import com.example.libraryapp.model.Book
+import android.content.Context
+import android.util.TypedValue
 
 class BookAdapter(private val listener: OnBookClickListener) : ListAdapter<Book, BookAdapter.BookViewHolder>(BookDiffCallback()) {
-
     interface OnBookClickListener {
         fun onBookClick(bookId: Int)
     }
@@ -37,8 +40,13 @@ class BookAdapter(private val listener: OnBookClickListener) : ListAdapter<Book,
         fun bind(book: Book) {
             binding.tvBookTitle.text = book.title
             binding.tvBookAuthor.text = book.author
-            // Tambahkan logic untuk load image buku
-            // binding.ivBookCover.setImageResource(book.coverImageResId)
+
+            Glide.with(binding.root.context)
+                .load(book.coverPath)
+                .override(200.dpToPx(binding.root.context), 250.dpToPx(binding.root.context))
+                .placeholder(R.drawable.ic_book)
+                .error(R.drawable.ic_book)
+                .into(binding.ivBookCover)
         }
     }
 
@@ -50,5 +58,29 @@ class BookAdapter(private val listener: OnBookClickListener) : ListAdapter<Book,
         override fun areContentsTheSame(oldItem: Book, newItem: Book): Boolean {
             return oldItem == newItem
         }
+    }
+
+    fun Float.dpToPx(context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            this,
+            context.resources.displayMetrics
+        ).toInt()
+    }
+
+    fun Int.dpToPx(context: Context): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            this.toFloat(),
+            context.resources.displayMetrics
+        ).toInt()
+    }
+
+    fun Int.pxToDp(context: Context): Float {
+        return this / context.resources.displayMetrics.density
+    }
+
+    fun Float.pxToDp(context: Context): Float {
+        return this / context.resources.displayMetrics.density
     }
 }

@@ -3,16 +3,25 @@ package com.example.libraryapp
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.libraryapp.adapter.BookAdapter
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import com.example.libraryapp.databinding.ActivityDashboardBinding
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class DashboardActivity : AppCompatActivity(), BookAdapter.OnBookClickListener {
+class DashboardActivity : AppCompatActivity(), LifecycleObserver {
     private lateinit var binding: ActivityDashboardBinding
+    lateinit var database: AppDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        database = AppDatabase.getInstance(this)
+        // Panggil DatabaseSeeder untuk melakukan inisialisasi data
+        lifecycleScope.launch {
+            DatabaseSeeder.seed(this@DashboardActivity, database.bookDao())
+        }
+
         // Set fragment awal (Homepage)
         loadFragment(HomepageFragment())
 
@@ -34,17 +43,6 @@ class DashboardActivity : AppCompatActivity(), BookAdapter.OnBookClickListener {
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
-            .commit()
-    }
-    override fun onBookClick(bookId: Int) {
-        val bundle = Bundle()
-        bundle.putInt("book_id", bookId)
-
-        val detailBookFragment = DetailBookFragment()
-        detailBookFragment.arguments = bundle
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, detailBookFragment)
-            .addToBackStack(null)
             .commit()
     }
 }

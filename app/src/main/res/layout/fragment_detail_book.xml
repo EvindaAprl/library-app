@@ -61,8 +61,8 @@
     <ImageView
         android:id="@+id/ivBookCover"
         android:layout_width="200dp"
-        android:layout_height="270dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,14 +76,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:fontFamily="@font/poppins_bold"
         android:gravity="center"
         android:text="@string/book_title"
         android:textColor="@android:color/black"
-        android:textSize="24sp"
-        android:fontFamily="@font/poppins_bold"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ivBookCover" />
 
@@ -97,7 +98,7 @@
         android:gravity="center"
         android:text="@string/book_author"
         android:textColor="#008000"
-        android:textSize="16sp"
+        android:textSize="12sp"
         android:fontFamily="@font/poppins_semibold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,20 +109,20 @@
         android:id="@+id/llInfoContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvBookAuthor"
-        >
+        app:layout_constraintTop_toBottomOf="@id/tvBookAuthor">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
             android:gravity="center"
-            android:orientation="vertical"
-            android:layout_marginEnd="24dp">
+            android:orientation="vertical">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -133,12 +134,11 @@
                 android:id="@+id/tvQueueCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
                 android:text="@string/queue_count_default"
                 android:textColor="@android:color/black"
-                android:fontFamily="@font/poppins_medium"
-                android:textSize="14sp"/>
+                android:textSize="10sp" />
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -156,30 +156,40 @@
                 android:id="@+id/tvAvailableCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
                 android:text="@string/available_count_default"
                 android:textColor="@android:color/black"
-                android:fontFamily="@font/poppins_medium"
-                android:textSize="14sp" />
+                android:textSize="10sp" />
         </LinearLayout>
-
     </LinearLayout>
 
-
     <!-- Sinopsis -->
-    <TextView
-        android:id="@+id/tvSynopsis"
+    <ScrollView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/book_synopsis"
-        android:textColor="@android:color/black"
-        android:textSize="14sp"
-        android:fontFamily="@font/poppins_light"
+        android:layout_height="205dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="16dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/btnAction"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llInfoContainer" />
+        app:layout_constraintTop_toBottomOf="@id/llInfoContainer"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/tvSynopsis"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/poppins_light"
+            android:text="@string/book_synopsis"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:gravity="fill_horizontal"/>
+
+    </ScrollView>
 
     <!-- Tombol Aksi -->
     <Button
@@ -187,10 +197,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:padding="15dp"
+        android:padding="10dp"
         android:text="@string/button_antri"
         android:textColor="@android:color/white"
         android:textSize="16sp"

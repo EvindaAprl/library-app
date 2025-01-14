@@ -1,9 +1,5 @@
 package com.example.libraryapp.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
 data class SocialPost(
     val id: Int,
     val userName: String,
@@ -13,4 +9,4 @@ data class SocialPost(
     val bookTitle: String,
     val likeCount: Int,
     val commentCount: Int
-) : Parcelable
+)

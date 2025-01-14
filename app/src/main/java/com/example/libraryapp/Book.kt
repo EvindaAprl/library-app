@@ -1,15 +1,16 @@
 package com.example.libraryapp.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-@Parcelize
+@Entity(tableName = "books")
 data class Book(
-    val id: Int,
+    @PrimaryKey val id: Int,
     val title: String,
     val author: String,
+    val year: Int,
     val synopsis: String,
-    val coverPath: String,
+    val coverPath: String?,
     val queueCount: Int,
     val availableCount: Int
-) : Parcelable
+)

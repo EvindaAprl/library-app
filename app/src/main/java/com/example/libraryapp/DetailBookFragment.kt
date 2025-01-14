@@ -1,6 +1,5 @@
 package com.example.libraryapp
 
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,17 +7,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import android.util.Log
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import com.bumptech.glide.Glide
 import com.example.libraryapp.databinding.FragmentDetailBookBinding
-import com.example.libraryapp.model.Book
-import java.io.File
 
 class DetailBookFragment : Fragment() {
 
     private var _binding: FragmentDetailBookBinding? = null
     private val binding get() = _binding!!
+    private lateinit var bookDao: BookDao
 
     private var bookId: Int? = null
-    private lateinit var book: Book
     private var isBorrowed: Boolean = false
 
     override fun onCreateView(
@@ -34,11 +35,11 @@ class DetailBookFragment : Fragment() {
 
         bookId = arguments?.getInt("BOOK_ID")
 
+        bookDao = (requireActivity() as DashboardActivity).database.bookDao()
+
         setupListeners()
         loadBookDetails()
-
     }
-
 
     private fun setupListeners() {
         binding.btnBack.setOnClickListener {
@@ -64,41 +65,45 @@ class DetailBookFragment : Fragment() {
     }
 
     private fun loadBookDetails() {
-        bookId?.let {
-            val bookFromDb = getBookFromDatabase(it)
-            this.book = bookFromDb
+        bookId?.let { bookId ->
+            lifecycleScope.launch {
+                try {
+                    // Ambil data buku dari database berdasarkan bookId
+                    val book = bookDao.getBookById(bookId)
 
-            binding.tvBookTitle.text = book.title
-            binding.tvBookAuthor.text = getString(R.string.author_prefix, book.author)
-            binding.tvQueueCount.text = getString(R.string.queue_count, book.queueCount)
-            binding.tvAvailableCount.text = getString(R.string.available_count, book.availableCount)
-            binding.tvSynopsis.text = book.synopsis
+                    if (book != null) {
+                        // Tampilkan data buku di UI
+                        binding.tvBookTitle.text = book.title
+                        binding.tvBookAuthor.text = getString(R.string.author_prefix, book.author)
+                        binding.tvQueueCount.text = getString(R.string.queue_count, book.queueCount)
+                        binding.tvAvailableCount.text = getString(R.string.available_count, book.availableCount)
+                        binding.tvSynopsis.text = book.synopsis
 
-
-            try {
-                val coverFile = File(book.coverPath)
-                if (coverFile.exists()) {
-                    val bitmap = BitmapFactory.decodeFile(coverFile.absolutePath) // decode bitmap
-                    if (bitmap != null) {
-                        binding.ivBookCover.setImageBitmap(bitmap)
+                        // Handling Cover Image
+                        if (!book.coverPath.isNullOrEmpty()) {
+                            Glide.with(requireContext())
+                                .load(book.coverPath)
+                                .into(binding.ivBookCover)
+                        } else {
+                            binding.ivBookCover.setImageResource(R.drawable.ic_book)
+                        }
                     } else {
-                        binding.ivBookCover.setImageResource(R.drawable.ic_book) // set placeholder gambar
-                        Toast.makeText(requireContext(), getString(R.string.error_decode_file), Toast.LENGTH_SHORT).show() // feedback error
+                        // Buku tidak ditemukan
+                        Toast.makeText(requireContext(), getString(R.string.book_not_found), Toast.LENGTH_SHORT).show()
+                        activity?.onBackPressedDispatcher?.onBackPressed()
                     }
-                } else {
-                    binding.ivBookCover.setImageResource(R.drawable.ic_book) // set placeholder gambar
-                    Toast.makeText(requireContext(), getString(R.string.file_not_found), Toast.LENGTH_SHORT).show() // feedback error
+                } catch (e: Exception) {
+                    // Tangani error jika terjadi masalah dengan database
+                    Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Log.e("DetailBookFragment", "Error loading book details", e)
                 }
-            } catch (e: Exception) {
-                binding.ivBookCover.setImageResource(R.drawable.ic_book) // set placeholder gambar
-                Toast.makeText(requireContext(), getString(R.string.error_load_image), Toast.LENGTH_SHORT).show() // feedback error
             }
-            updateButtonState()
-
-        }  ?: run {
+        } ?: run {
             Toast.makeText(requireContext(), getString(R.string.book_not_found_null), Toast.LENGTH_SHORT).show()
+            activity?.onBackPressedDispatcher?.onBackPressed()
         }
     }
+
     private fun updateButtonState() {
         if (isBorrowed) {
             binding.btnAction.text = getString(R.string.button_pinjam)
@@ -107,18 +112,6 @@ class DetailBookFragment : Fragment() {
             binding.btnAction.text = getString(R.string.button_antri)
             binding.btnAction.backgroundTintList = ContextCompat.getColorStateList(requireContext(),R.color.green)
         }
-    }
-    private fun getBookFromDatabase(bookId: Int): Book {
-        // Replace this with actual Room database query or other local database logic
-        return Book(
-            id = bookId,
-            title = "Contoh Judul Buku",
-            author = "Penulis Contoh",
-            synopsis = "Ini adalah sinopsis dari buku yang sangat menarik dan informatif.",
-            coverPath = "/path/to/book_cover.jpg",
-            queueCount = 251,
-            availableCount = 5
-        )
     }
 
     override fun onDestroyView() {
