@@ -55,12 +55,21 @@ class DetailBookFragment : Fragment() {
         }
 
         binding.btnAction.setOnClickListener {
-            isBorrowed = !isBorrowed
-            updateButtonState()
-
-            val message = if(isBorrowed) getString(R.string.added_to_queue) else getString(R.string.remove_from_queue)
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-
+            when (binding.btnAction.text.toString()) {
+                getString(R.string.button_antri) -> {
+                    binding.btnAction.text = getString(R.string.button_pinjam)
+                    binding.btnAction.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.green)
+                    Toast.makeText(requireContext(), getString(R.string.added_to_queue), Toast.LENGTH_SHORT).show()
+                }
+                getString(R.string.button_pinjam) -> {
+                    binding.btnAction.text = getString(R.string.button_baca)
+                    binding.btnAction.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.orange)
+                    Toast.makeText(requireContext(), getString(R.string.added_to_borrow), Toast.LENGTH_SHORT).show()
+                }
+                getString(R.string.button_baca) -> {
+                    Toast.makeText(requireContext(), getString(R.string.book_not_available), Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
@@ -101,16 +110,6 @@ class DetailBookFragment : Fragment() {
         } ?: run {
             Toast.makeText(requireContext(), getString(R.string.book_not_found_null), Toast.LENGTH_SHORT).show()
             activity?.onBackPressedDispatcher?.onBackPressed()
-        }
-    }
-
-    private fun updateButtonState() {
-        if (isBorrowed) {
-            binding.btnAction.text = getString(R.string.button_pinjam)
-            binding.btnAction.backgroundTintList = ContextCompat.getColorStateList(requireContext(),R.color.orange)
-        } else {
-            binding.btnAction.text = getString(R.string.button_antri)
-            binding.btnAction.backgroundTintList = ContextCompat.getColorStateList(requireContext(),R.color.green)
         }
     }
 

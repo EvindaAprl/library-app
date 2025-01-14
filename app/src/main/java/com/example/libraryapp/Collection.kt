@@ -1,8 +1,12 @@
 package com.example.libraryapp.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "collections")
 data class Collection(
-    val id: Int,
+    @PrimaryKey val id: Int,
     val title: String,
     val bookCount: Int,
-    val coverPath: String
+    val coverPath: String?
 )

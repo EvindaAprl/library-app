@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import android.content.Context
+import android.util.TypedValue
 import com.bumptech.glide.Glide
 import com.example.libraryapp.R
 import com.example.libraryapp.databinding.ItemBookBinding
 import com.example.libraryapp.model.Book
-import android.content.Context
-import android.util.TypedValue
 
 class BookAdapter(private val listener: OnBookClickListener) : ListAdapter<Book, BookAdapter.BookViewHolder>(BookDiffCallback()) {
     interface OnBookClickListener {
@@ -60,27 +60,11 @@ class BookAdapter(private val listener: OnBookClickListener) : ListAdapter<Book,
         }
     }
 
-    fun Float.dpToPx(context: Context): Int {
-        return TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            this,
-            context.resources.displayMetrics
-        ).toInt()
-    }
-
     fun Int.dpToPx(context: Context): Int {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             this.toFloat(),
             context.resources.displayMetrics
         ).toInt()
-    }
-
-    fun Int.pxToDp(context: Context): Float {
-        return this / context.resources.displayMetrics.density
-    }
-
-    fun Float.pxToDp(context: Context): Float {
-        return this / context.resources.displayMetrics.density
     }
 }

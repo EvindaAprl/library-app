@@ -1,21 +1,25 @@
 package com.example.libraryapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.libraryapp.adapter.CollectionAdapter
 import com.example.libraryapp.databinding.FragmentCollectionBinding
-import com.example.libraryapp.model.Collection
+import kotlinx.coroutines.launch
 
 class CollectionFragment : Fragment() {
 
     private var _binding: FragmentCollectionBinding? = null
     private val binding get() = _binding!!
     private lateinit var collectionAdapter: CollectionAdapter
+    private lateinit var collectionDao: CollectionDao // Tambahkan ini
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,16 +31,20 @@ class CollectionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        collectionDao = (requireActivity() as DashboardActivity).database.collectionDao() // Inisialisasi collectionDao
+
         setupRecyclerView()
         loadData()
         setupSearch()
         setupCreateCollection()
-
     }
 
 
     private fun setupRecyclerView() {
-        collectionAdapter = CollectionAdapter()
+        collectionAdapter = CollectionAdapter { collectionId ->
+            // Handle click di sini, misalnya navigasi ke detail collection
+            Toast.makeText(requireContext(), "Collection with ID $collectionId clicked", Toast.LENGTH_SHORT).show()
+        }
         binding.collectionRecycler.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = collectionAdapter
@@ -44,12 +52,15 @@ class CollectionFragment : Fragment() {
     }
 
     private fun loadData() {
-        val dummyCollectionList = listOf(
-            Collection(id = 1, title = "Favoritku", bookCount = 10, coverPath = ""),
-            Collection(id = 2, title = "Belajar Desain", bookCount = 5, coverPath = ""),
-            Collection(id = 3, title = "Koding", bookCount = 32, coverPath = ""),
-        )
-        collectionAdapter.submitList(dummyCollectionList)
+        lifecycleScope.launch {
+            try {
+                val collections = collectionDao.getAllCollections()
+                collectionAdapter.submitList(collections)
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                Log.e("CollectionFragment", "Error loading collections", e)
+            }
+        }
     }
 
     private fun setupSearch(){
@@ -62,8 +73,6 @@ class CollectionFragment : Fragment() {
             Toast.makeText(requireContext(), getString(R.string.create_collection_feature_not_available), Toast.LENGTH_SHORT).show()
         }
     }
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -13,14 +13,15 @@
     <string name="button_antri">Antri</string>
     <string name="button_pinjam">Pinjam</string>
     <string name="button_baca">Baca</string>
-    <string name="remove_from_queue">Berhasil dikeluarkan dari antrian</string>
     <string name="bookmarked">Bookmarked!</string>
-    <string name="added_to_favorites">Added to favorites!</string>
-    <string name="added_to_queue">Added to queue!</string>
-    <string name="author_prefix">Penulis: %s</string>
-    <string name="book_not_found">Book not found</string>
-    <string name="book_not_found_null">Book id cannot be null</string>
-    <string name="file_not_found">File not found</string>
+    <string name="added_to_favorites">Ditambahkan ke favorit!</string>
+    <string name="added_to_queue">Ditambahkan ke antrian!</string>
+    <string name="added_to_borrow">Ditambahkan ke pinjam!</string>
+    <string name="book_not_available">Buku belum bisa dibaca!</string>
+    <string name="author_prefix">%s</string>
+    <string name="book_not_found">Buku tidak ditemukan!</string>
+    <string name="book_not_found_null">Id buku tidak boleh kosong!</string>
+    <string name="file_not_found">File tidak ditemukan!</string>
     <string name="error_decode_file">Error decode file</string>
     <string name="error_load_image">Error load image</string>
 
@@ -47,11 +48,11 @@
     <string name="post_button">Post</string>
     <string name="create_collection_button">+ Buat Koleksi</string>
 
-    <string name="search_feature_not_available">Fitur pencarian belum tersedia</string>
-    <string name="create_collection_feature_not_available">Fitur buat koleksi belum tersedia</string>
-    <string name="edit_profile_not_available">Fitur edit profile belum tersedia</string>
-    <string name="share_profile_not_available">Fitur share profile belum tersedia</string>
-    <string name="post_feature_not_available">Fitur post belum tersedia</string>
-
+    <string name="search_feature_not_available">Fitur pencarian belum tersedia!</string>
+    <string name="create_collection_feature_not_available">Fitur buat koleksi belum tersedia!</string>
+    <string name="edit_profile_not_available">Fitur edit profile belum tersedia!</string>
+    <string name="share_profile_not_available">Fitur share profile belum tersedia!</string>
+    <string name="post_feature_not_available">Fitur post belum tersedia!</string>
+    <string name="follow_feature_not_available">Fitur follow belum tersedia!</string>
 
 </resources>

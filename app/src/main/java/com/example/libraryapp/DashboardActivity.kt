@@ -19,7 +19,13 @@ class DashboardActivity : AppCompatActivity(), LifecycleObserver {
         database = AppDatabase.getInstance(this)
         // Panggil DatabaseSeeder untuk melakukan inisialisasi data
         lifecycleScope.launch {
-            DatabaseSeeder.seed(this@DashboardActivity, database.bookDao())
+            DatabaseSeeder.seed(
+                this@DashboardActivity,
+                database.bookDao(),
+                database.collectionDao(),
+                database.socialPostDao(),
+                database.userProfileDao()
+            )
         }
 
         // Set fragment awal (Homepage)
