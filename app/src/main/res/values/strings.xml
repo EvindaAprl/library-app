@@ -55,4 +55,8 @@
     <string name="post_feature_not_available">Fitur post belum tersedia!</string>
     <string name="follow_feature_not_available">Fitur follow belum tersedia!</string>
 
+    <string name="page_number">%1$d dari %2$d</string>
+    <string name="book_content_not_found">Konten buku tidak ditemukan.</string>
+    <string name="book_content_not_available">Konten buku tidak tersedia.</string>
+
 </resources>

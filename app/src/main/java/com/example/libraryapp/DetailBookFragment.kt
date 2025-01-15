@@ -1,5 +1,6 @@
 package com.example.libraryapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -64,7 +65,13 @@ class DetailBookFragment : Fragment() {
                     Toast.makeText(requireContext(), getString(R.string.added_to_borrow), Toast.LENGTH_SHORT).show()
                 }
                 getString(R.string.button_baca) -> {
-                    Toast.makeText(requireContext(), getString(R.string.book_not_available), Toast.LENGTH_SHORT).show()
+                    bookId?.let {
+                        val intent = Intent(requireContext(), ReadBookActivity::class.java)
+                        intent.putExtra("BOOK_ID", it) // Pass the book ID
+                        startActivity(intent)
+                    } ?: run {
+                        Toast.makeText(requireContext(), getString(R.string.book_not_found), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
